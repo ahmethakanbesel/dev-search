@@ -1,0 +1,74 @@
+{% include "./header.html" %}
+<div class="container mt-5 px-5">
+    <div class="row align-items-start justify-content-left">
+        <div class="col-lg-3 col-md-4 col-sm-12">
+            <img class="img-thumbnail" src="{{ developer.avatar }}" alt="{{ developer.username }}">
+            <h1><span>{{ developer.name }} </span><span class="mt-0 pt-0 fs-6"><a
+                    class="badge badge-primary bg-dark text-decoration-none"
+                    href="https://github.com/{{ developer.username }}">@{{ developer.username }}</a></span></h1>
+            <i class="fas fa-users"></i> {{ developer.followers }} followers · {{ developer.following }} following
+            {% if developer.bio %}
+                <p class="lead mt-3">{{ developer.bio }}</p>
+            {% endif %}
+            <hr>
+            <p>
+                {% if developer.email %}
+                    <i class="fas fa-envelope"></i> <a href="mailto:{{ developer.email }}"
+                                                       class="text-decoration-none text-dark">{{ developer.email }}</a>
+                    <br>
+                {% endif %}
+                {% if developer.company %}
+                    <i class="fas fa-briefcase"></i> {{ developer.company }}
+                    <br>
+                {% endif %}
+                {% if developer.website %}
+                    <i class="fas fa-globe"></i> <a href="{{ developer.website }}" target="_blank"
+                                                    class="text-decoration-none text-dark">{{ developer.website }}</a>
+                    <br>
+                {% endif %}
+                {% if developer.location %}
+                    <i class="fas fa-location-dot"></i> {{ developer.location }}
+                {% endif %}
+            </p>
+        </div>
+        <div class="col-lg-9 col-md-8 col-sm-12">
+            <div class="row">
+                <h2>Summary</h2>
+                <p class="fs-5">
+                    <i class="fas fa-code"></i> {{ developer.repositories }} public repositories received <i
+                        class="fas fa-star" style="color:#fdcc0d"></i> {{ developer.stars }} stars and <i
+                        class="fas fa-code-branch"></i> {{ developer.forks }} forks.
+                <h2>Programming Languages</h2>
+                <ul class="px-5">
+                    {% for language in languages %}
+                        <li>{{ language.language }}</li>
+                    {% endfor %}
+                </ul>
+                </p>
+            </div>
+            <div class="row align-items-start justify-content-start">
+                <h2>Repositories</h2>
+                {% for repo in repositories %}
+                    <div class="col-lg-6 col-md-6 col-sm-12 rounded pt-2">
+                        <i class="fas fa-bookmark"></i> <a class="text-decoration-none text-dark fw-bold"
+                                                           href="https://github.com/{{ developer.username }}/{{ repo.name }}"
+                                                           target="_blank">{{ repo.name }}</a>
+                        {% if repo.description %}
+                            <p>{{ repo.description }}</p>
+                        {% else %}
+                            <p></p>
+                        {% endif %}
+                        <p>
+                            {% if repo.language %}
+                                <i class="fas fa-code"></i> {{ repo.language }}
+                            {% endif %}
+                            <i class="fas fa-star" style="color:#fdcc0d"></i> {{ repo.stars }}
+                            <i class="fas fa-code-branch"></i> {{ repo.forks }}
+                    </div>
+                {% endfor %}
+            </div>
+
+        </div>
+    </div>
+</div>
+{% include "./footer.html" %}
