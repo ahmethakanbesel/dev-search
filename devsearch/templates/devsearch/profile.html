@@ -35,20 +35,22 @@
             <div class="row">
                 <h2>Summary</h2>
                 <p class="fs-5">
-                    <i class="fas fa-code"></i> {{ developer.repositories }} public repositories has <i
-                        class="fas fa-star" style="color:#fdcc0d"></i> {{ developer.stars }} stars and <i
-                        class="fas fa-code-branch"></i> {{ developer.forks }} forks.
-                    Last push was {{ developer.last_push }} (UTC+0).
+                    <i class="fas fa-code"></i> {{ developer.repositories }} public repositories<br>
+                    <i class="fas fa-star" style="color:#fdcc0d"></i> {{ developer.stars }} stars<br>
+                    <i class="fas fa-code-branch"></i> {{ developer.forks }} forks<br>
+                    <i class="fas fa-clock"></i> Last push was {{ developer.last_push }} (UTC+0).
                 <h2>Programming Languages</h2>
                 <ul class="px-5">
                     {% for language in languages %}
-                        <li>{{ language.language }} <span class="badge bg-primary">{{ language.count }} repos</span></li>
+                        <li>{{ language.language }} <span class="badge bg-primary">{{ language.count }} repos</span>
+                        </li>
                     {% endfor %}
                 </ul>
                 </p>
             </div>
             <div class="row align-items-start justify-content-start">
-                <h2>Repositories</h2>
+                <h2>Repositories </h2>
+                <p>Ordered by stars.</p>
                 {% for repo in repositories %}
                     <div class="col-lg-6 col-md-6 col-sm-12 rounded pt-2 same-h">
                         <i class="fas fa-bookmark"></i> <a class="text-decoration-none text-dark fw-bold"
