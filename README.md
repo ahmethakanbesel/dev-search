@@ -16,6 +16,7 @@ You can create a personal access token here: https://github.com/settings/tokens
 - Open http://localhost:8000/
 
 ## Preview
+Personal informations removed from preview images.
 ![Home Page](preview/homepage.png "Home Page")
 *Home Page*
 
