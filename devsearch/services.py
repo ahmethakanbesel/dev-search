@@ -8,6 +8,7 @@ from os import path
 import requests
 
 from devsearch.models import Developer, Repository, RepositoryTopic
+import devsearch.settings as settings
 
 
 def cache_valid(digest: str, days=1):
@@ -33,7 +34,11 @@ def search_on_github(keyword: str, page: int, per_page=15):
             return data
     else:
         url = "https://api.github.com/search/users?" + urllib.parse.urlencode(params)
-        response = requests.request("GET", url)
+        if settings.GITHUB_USERNAME and settings.GITHUB_PERSONAL_ACCESS_TOKEN:
+            response = requests.request("GET", url,
+                                        auth=(settings.GITHUB_USERNAME, settings.GITHUB_PERSONAL_ACCESS_TOKEN))
+        else:
+            response = requests.request("GET", url)
         data = response.json()
         i = 0
         if 'items' in data:
@@ -49,7 +54,10 @@ def search_on_github(keyword: str, page: int, per_page=15):
 
 def get_user_data(username: str):
     url = "https://api.github.com/users/" + username
-    response = requests.request("GET", url)
+    if settings.GITHUB_USERNAME and settings.GITHUB_PERSONAL_ACCESS_TOKEN:
+        response = requests.request("GET", url, auth=(settings.GITHUB_USERNAME, settings.GITHUB_PERSONAL_ACCESS_TOKEN))
+    else:
+        response = requests.request("GET", url)
     data = response.json()
     return data
 
@@ -57,7 +65,10 @@ def get_user_data(username: str):
 def get_user_repositories(username: str, per_page=10, sort='pushed'):
     params = {'per_page': per_page, 'sort': sort}
     url = "https://api.github.com/users/" + username + "/repos?" + urllib.parse.urlencode(params)
-    response = requests.request("GET", url)
+    if settings.GITHUB_USERNAME and settings.GITHUB_PERSONAL_ACCESS_TOKEN:
+        response = requests.request("GET", url, auth=(settings.GITHUB_USERNAME, settings.GITHUB_PERSONAL_ACCESS_TOKEN))
+    else:
+        response = requests.request("GET", url)
     data = response.json()
     return data
 
