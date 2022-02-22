@@ -1,0 +1,18 @@
+{% include "./header.html" %}
+<div class="container mt-5 px-5">
+    <div class="row align-items-center">
+        <div class="col-md-12">
+            <h1>Search for developers on GitHub</h1>
+            <form action="./search" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ form }}
+                </div>
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary mt-1">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% include "./footer.html" %}
