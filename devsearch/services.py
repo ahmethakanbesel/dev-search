@@ -1,14 +1,14 @@
 import json
 import os
-from datetime import datetime, timedelta
 import urllib.parse
+from datetime import datetime, timedelta
 from hashlib import sha256
 from os import path
 
 import requests
 
-from devsearch.models import Developer, Repository, RepositoryTopic
 import devsearch.settings as settings
+from devsearch.models import Developer, Repository
 
 
 def cache_valid(digest: str, days=1):

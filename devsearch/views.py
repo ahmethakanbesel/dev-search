@@ -1,14 +1,12 @@
-import datetime
-import json
+import urllib.parse
 
 from django.contrib.humanize.templatetags import humanize
 from django.db.models import Sum
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render
-from .models import Developer, Repository
-from .forms import SearchForm
-import urllib.parse
 
+from .forms import SearchForm
+from .models import Developer, Repository
 from .services import search_on_github, save_user, get_user
 
 
@@ -40,9 +38,6 @@ def result(request, keyword, page=1):
             page = page_param
     # get data from github
     developer_data = search_on_github(keyword, page)
-    # read json file
-    # with open('./devsearch/result.json') as json_file:
-    #    developer_data = json.load(json_file)
     context = {
         "keyword": keyword,
         "total_count": developer_data['total_count'],
