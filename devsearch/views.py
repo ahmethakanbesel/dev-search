@@ -1,5 +1,7 @@
+import datetime
 import json
 
+from django.contrib.humanize.templatetags import humanize
 from django.db.models import Sum
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render
@@ -58,6 +60,9 @@ def detail(request, username):
     repositories = Repository.objects.filter(owner=developer)
     developer.stars = repositories.aggregate(Sum('stars'))['stars__sum']
     developer.forks = repositories.aggregate(Sum('forks'))['forks__sum']
+    developer.last_push = repositories.order_by('-last_push').first().last_push
+    developer.save()
+    developer.last_push = humanize.naturaltime(repositories.order_by('-last_push').first().last_push)
     languages = repositories.values('language').exclude(language=None).distinct()
     repositories = repositories.order_by('-stars')
     return render(request, 'devsearch/profile.html',

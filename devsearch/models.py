@@ -14,6 +14,7 @@ class Developer(models.Model):
     avatar = models.URLField(default='', null=True, blank=True)
     stars = models.IntegerField(default=0, null=True, blank=True)
     forks = models.IntegerField(default=0, null=True, blank=True)
+    last_push = models.DateTimeField(null=True, blank=True)
     followers = models.IntegerField(default=0, null=True, blank=True)
     following = models.IntegerField(default=0, null=True, blank=True)
     repositories = models.IntegerField(default=0, null=True, blank=True)
