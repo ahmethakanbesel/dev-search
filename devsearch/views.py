@@ -48,12 +48,15 @@ def result(request, query, page=1):
             page = page_param
     # get data from github
     developer_data = search_on_github(query, page)
+    page_count = int(ceil(developer_data['total_count'] / settings.RESULTS_PER_PAGE)) + 1
+    if page_count > 21:
+        page_count = 21
     context = {
         "query": query,
         "keyword": query.split('repos')[0],
         "total_count": developer_data['total_count'],
         "data": developer_data['items'],
-        "range": range(1, int(ceil(developer_data['total_count'] / settings.RESULTS_PER_PAGE)) + 1),
+        "range": range(1, page_count),
         "current_page": page
     }
     return render(request, 'devsearch/result.html', context)
