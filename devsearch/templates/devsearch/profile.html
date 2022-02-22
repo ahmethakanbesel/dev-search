@@ -42,7 +42,7 @@
                 <h2>Programming Languages</h2>
                 <ul class="px-5">
                     {% for language in languages %}
-                        <li>{{ language.language }}</li>
+                        <li>{{ language.language }} <span class="badge bg-primary">{{ language.count }} repos</span></li>
                     {% endfor %}
                 </ul>
                 </p>

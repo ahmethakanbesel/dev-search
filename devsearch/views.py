@@ -72,7 +72,7 @@ def detail(request, username):
     developer.save()
     if developer.last_push:
         developer.last_push = humanize.naturaltime(repositories.order_by('-last_push').first().last_push)
-    languages = repositories.values('language').exclude(language=None).distinct()
+    languages = repositories.raw('SELECT 1 as id, language, count(1) count FROM devsearch_repository WHERE owner_id = %s and language IS NOT NULL GROUP BY language ORDER BY count DESC', [developer.id])
     repositories = repositories.order_by('-stars')
     return render(request, 'devsearch/profile.html',
                   {'developer': developer, 'repositories': repositories, 'languages': languages})
