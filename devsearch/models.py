@@ -19,6 +19,7 @@ class Developer(models.Model):
     followers = models.IntegerField(default=0, null=True, blank=True)
     following = models.IntegerField(default=0, null=True, blank=True)
     repositories = models.IntegerField(default=0, null=True, blank=True)
+    github_joined_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

@@ -6,6 +6,7 @@ from hashlib import sha256
 from os import path
 
 import requests
+from django.contrib.humanize.templatetags import humanize
 
 import devsearch.settings as settings
 from devsearch.models import Developer, Repository
@@ -23,7 +24,7 @@ def cache_valid(digest: str, days=1):
     return False
 
 
-def search_on_github(keyword: str, page: int, per_page=15):
+def search_on_github(keyword: str, page: int, per_page=settings.RESULTS_PER_PAGE):
     params = {'q': keyword, 'page': page, 'per_page': per_page}
     # check cache.json exists
     digest = sha256(json.dumps(params, sort_keys=True).encode('utf8')).hexdigest()
@@ -59,6 +60,7 @@ def get_user_data(username: str):
     else:
         response = requests.request("GET", url)
     data = response.json()
+    data['github_joined_ago'] = humanize.naturaltime(datetime.strptime(data['created_at'].split('T')[0], "%Y-%m-%d"))
     return data
 
 
@@ -76,6 +78,11 @@ def get_user_repositories(username: str, per_page=10, sort='pushed'):
 def get_user(username: str):
     user = get_user_data(username)
     user['repositories'] = get_user_repositories(username)
+    user['stars'] = 0
+    if user['name'] is None:
+        user['name'] = user['login']
+    for repo in user['repositories']:
+        user['stars'] += repo['stargazers_count']
     return user
 
 
@@ -96,7 +103,8 @@ def save_user(developer):
             avatar=developer['avatar_url'],
             followers=developer['followers'],
             following=developer['following'],
-            repositories=developer['public_repos']
+            repositories=developer['public_repos'],
+            github_joined_at=developer['created_at'],
         )
         for repo in developer['repositories']:
             if not Repository.objects.filter(name=repo['name'], owner=dev.id).exists():
@@ -113,24 +121,3 @@ def save_user(developer):
                     license=repo['license']['name'] if repo['license'] else None,
                     last_push=repo['pushed_at']
                 )
-
-
-def save_to_database(developer_data):
-    time_threshold = datetime.now() - timedelta(days=30)
-    for developer in developer_data:
-        if not Developer.objects.filter(username=developer['login']).exists() or Developer.objects.get(
-                username=developer['login'], updated_at__lt=time_threshold):
-            # save to database
-            Developer.objects.create(
-                name=developer['name'],
-                username=developer['login'],
-                bio=developer['bio'],
-                email=developer['email'],
-                company=developer['company'],
-                location=developer['location'],
-                website=developer['blog'],
-                avatar=developer['avatar_url'],
-                followers=developer['followers'],
-                following=developer['following'],
-                repositories=developer['public_repos']
-            )
