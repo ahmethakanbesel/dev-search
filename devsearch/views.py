@@ -48,25 +48,18 @@ def result(request, keyword):
 def detail(request, username):
     try:
         developer = Developer.objects.get(username=username)
-        repositories = Repository.objects.filter(owner=developer)
-        developer.stars = repositories.aggregate(Sum('stars'))['stars__sum']
-        developer.forks = repositories.aggregate(Sum('forks'))['forks__sum']
-        languages = repositories.values('language').exclude(language=None).distinct()
-        repositories = repositories.order_by('-stars')
     except Developer.DoesNotExist:
         user = get_user(username)
         if 'login' in user:
             save_user(user)
             developer = Developer.objects.get(username=username)
-            repositories = Repository.objects.filter(owner=developer)
-            developer.stars = repositories.aggregate(Sum('stars'))['stars__sum']
-            developer.forks = repositories.aggregate(Sum('forks'))['forks__sum']
-            languages = repositories.values('language').exclude(language=None).distinct()
-            repositories = repositories.order_by('-stars')
-            return render(request, 'devsearch/profile.html',
-                          {'developer': developer, 'repositories': repositories, 'languages': languages})
         else:
             raise Http404("GitHub account does not exist")
+    repositories = Repository.objects.filter(owner=developer)
+    developer.stars = repositories.aggregate(Sum('stars'))['stars__sum']
+    developer.forks = repositories.aggregate(Sum('forks'))['forks__sum']
+    languages = repositories.values('language').exclude(language=None).distinct()
+    repositories = repositories.order_by('-stars')
     return render(request, 'devsearch/profile.html',
                   {'developer': developer, 'repositories': repositories, 'languages': languages})
 
