@@ -21,6 +21,18 @@
                 </div>
             </div>
         {% endfor %}
+
+        <div class="text-center d-flex justify-content-center align-items-center">
+            <ul class="pagination">
+                {% for i in range %}
+                    {% if current_page == i %}
+                        <li class="page-item"><a class="page-link fw-bold" href="?page={{ i }}">{{ i }}</a></li>
+                    {% else %}
+                        <li class="page-item"><a class="page-link text-secondary" href="?page={{ i }}">{{ i }}</a></li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 </div>
 {% include "./footer.html" %}

@@ -33,16 +33,22 @@ def search(request):
     return render(request, 'devsearch/index.html', {'form': form})
 
 
-def result(request, keyword):
+def result(request, keyword, page=1):
+    if request.GET.get('page'):
+        page_param = int(request.GET.get('page'))
+        if page_param and page_param > 1:
+            page = page_param
     # get data from github
-    developer_data = search_on_github(keyword, 1)
+    developer_data = search_on_github(keyword, page)
     # read json file
     # with open('./devsearch/result.json') as json_file:
     #    developer_data = json.load(json_file)
     context = {
         "keyword": keyword,
         "total_count": developer_data['total_count'],
-        "data": developer_data['items']
+        "data": developer_data['items'],
+        "range": range(1,  21),
+        "current_page": page
     }
     return render(request, 'devsearch/result.html', context)
 
@@ -60,9 +66,12 @@ def detail(request, username):
     repositories = Repository.objects.filter(owner=developer)
     developer.stars = repositories.aggregate(Sum('stars'))['stars__sum']
     developer.forks = repositories.aggregate(Sum('forks'))['forks__sum']
-    developer.last_push = repositories.order_by('-last_push').first().last_push
+    developer.last_push = repositories.order_by('-last_push').first()
+    if developer.last_push:
+        developer.last_push = developer.last_push.last_push
     developer.save()
-    developer.last_push = humanize.naturaltime(repositories.order_by('-last_push').first().last_push)
+    if developer.last_push:
+        developer.last_push = humanize.naturaltime(repositories.order_by('-last_push').first().last_push)
     languages = repositories.values('language').exclude(language=None).distinct()
     repositories = repositories.order_by('-stars')
     return render(request, 'devsearch/profile.html',

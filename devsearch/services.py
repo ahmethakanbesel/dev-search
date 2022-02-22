@@ -22,10 +22,11 @@ def cache_valid(digest: str, days=1):
     return False
 
 
-def search_on_github(keyword: str, page: int, per_page=20):
+def search_on_github(keyword: str, page: int, per_page=15):
     params = {'q': keyword, 'page': page, 'per_page': per_page}
     # check cache.json exists
     digest = sha256(json.dumps(params, sort_keys=True).encode('utf8')).hexdigest()
+    print(digest)
     if cache_valid(digest):
         with open('devsearch/cache/' + digest + '.json') as f:
             data = json.load(f)
