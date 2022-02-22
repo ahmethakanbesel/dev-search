@@ -81,6 +81,7 @@ def save_user(developer):
             company=developer['company'],
             location=developer['location'],
             website=developer['blog'],
+            twitter=developer['twitter_username'],
             avatar=developer['avatar_url'],
             followers=developer['followers'],
             following=developer['following'],

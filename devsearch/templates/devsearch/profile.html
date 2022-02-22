@@ -28,6 +28,11 @@
                 {% endif %}
                 {% if developer.location %}
                     <i class="fas fa-location-dot"></i> {{ developer.location }}
+                    <br>
+                {% endif %}
+                {% if developer.twitter %}
+                    <i class="fa-brands fa-twitter"></i> <a href="https://twitter.com/{{ developer.twitter }}" target="_blank"
+                                                    class="text-decoration-none text-dark">@{{ developer.twitter }}</a>
                 {% endif %}
             </p>
         </div>

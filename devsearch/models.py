@@ -4,13 +4,14 @@ from django.db import models
 # Create your models here.
 class Developer(models.Model):
     id = models.BigAutoField(primary_key=True)
-    name = models.CharField(max_length=128, null=False, blank=False)
+    name = models.CharField(max_length=128, null=True, blank=True)
     username = models.SlugField(default='', null=True, unique=True, editable=False)
     bio = models.TextField(default='', null=True, blank=True)
     email = models.EmailField(default='', null=True, blank=True)
     company = models.CharField(max_length=128, null=True, blank=True)
     location = models.CharField(max_length=128, null=True, blank=True)
     website = models.URLField(default='', null=True, blank=True)
+    twitter = models.CharField(max_length=128, null=True, blank=True)
     avatar = models.URLField(default='', null=True, blank=True)
     stars = models.IntegerField(default=0, null=True, blank=True)
     forks = models.IntegerField(default=0, null=True, blank=True)
